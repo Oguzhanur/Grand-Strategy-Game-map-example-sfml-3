@@ -1,0 +1,22 @@
+{
+    "TUR": {
+        "name": "Turkiye",
+        "color": [220, 20, 60],
+        "flag": "source/country/TUR.png"
+    },
+    "GER": {
+        "name": "Germany",
+        "color": [220, 220, 220],
+        "flag": "source/country/GER.png"
+    },
+    "FRA": {
+        "name": "France",
+        "color": [220, 20, 60],
+        "flag": "source/country/FRA.png"
+    },
+    "ENG": {
+        "name": "England",
+        "color": [220, 20, 60],
+        "flag": "source/country/ENG.png"
+    }
+}

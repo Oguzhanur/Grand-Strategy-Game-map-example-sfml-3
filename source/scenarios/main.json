@@ -1,0 +1,14 @@
+{
+    "TUR": {
+        "ownedStates": [1]
+    },
+    "GER": {
+        "ownedStates": [2]
+    },
+    "FRA": {
+        "ownedStates": [3]
+    },
+    "ENG": {
+        "ownedStates": [4]
+    }
+}
