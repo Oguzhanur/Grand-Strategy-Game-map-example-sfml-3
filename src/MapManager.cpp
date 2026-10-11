@@ -12,15 +12,13 @@ mapManager::mapManager(std::string imagePath) : _mapTexture(), _mapSprite(_mapTe
     }
 }
 
-// CSV'den state'e çevirme
+// CSV'den state'e
 std::unordered_map<int, State> mapManager::CSVtoState(std::vector<dataType> data) {
-    // Sonunda verilecek değişkeni unordered_map olarak tanımlıyoruz
     std::unordered_map<int, State> states;
     
-    // Rehashing'i (performans kaybını) önlemek için baştan yer ayırıyoruz
+    // rezerve
     states.reserve(data.size());
 
-    // Rengi idye çevirirken kolaylık için
     std::unordered_map<uint32_t, int> colorToID;
     for (const auto& d : data)
         colorToID[sf::Color(d.colorR, d.colorG, d.colorB).toInteger()] = d.id;
@@ -28,7 +26,6 @@ std::unordered_map<int, State> mapManager::CSVtoState(std::vector<dataType> data
     // Harita boyutu
     sf::Vector2u size = _map.getSize();
 
-    // Pixel -> color grouping (tek geçiş)
     std::unordered_map<uint32_t, std::vector<sf::Vector2u>> pixelsByColor;
 
     for (unsigned int y = 0; y < size.y; ++y)
@@ -38,7 +35,6 @@ std::unordered_map<int, State> mapManager::CSVtoState(std::vector<dataType> data
     // State oluşturma
     for (const auto& d : data) {
         State s;
-        // s.id = d.id; satırı kaldırıldı.
         s.stateName = d.stateName;
         s.color = sf::Color(d.colorR, d.colorG, d.colorB);
 
@@ -52,7 +48,6 @@ std::unordered_map<int, State> mapManager::CSVtoState(std::vector<dataType> data
         if (it != pixelsByColor.end())
             s.pixelList = std::move(it->second);
 
-        // Vector'e push_back yapmak yerine Map'e emplace (yerleştirme) yapıyoruz
         states.emplace(d.id, std::move(s));
     }
 
@@ -61,8 +56,6 @@ std::unordered_map<int, State> mapManager::CSVtoState(std::vector<dataType> data
     // Komşuluk ilişkisi
     const std::vector<sf::Vector2i> dirs = {{1,0},{-1,0},{0,1},{0,-1}};
 
-    // std::unordered_map üzerinde dönerken C++17 Structured Binding kullanıyoruz
-    // currentId = int (Key), state = State (Value)
     for (auto& [currentId, state] : states) {
         std::unordered_set<int> neighbors;
 
@@ -77,7 +70,7 @@ std::unordered_map<int, State> mapManager::CSVtoState(std::vector<dataType> data
                 auto c = _map.getPixel({(unsigned)nx, (unsigned)ny}).toInteger();
 
                 auto it = colorToID.find(c);
-                // state.id artık olmadığı için kontrolü map'in anahtarı olan currentId ile yapıyoruz
+                
                 if (it != colorToID.end() && it->second != currentId)
                     neighbors.insert(it->second);
             }
@@ -89,17 +82,15 @@ std::unordered_map<int, State> mapManager::CSVtoState(std::vector<dataType> data
     return states;
 }
 
-// Koordinata göre piksel rengini dönen fonksiyon
+// get fonksiyonları
 sf::Color mapManager::getPixel(sf::Vector2u coords) {
     return _map.getPixel(coords);
 }
 
-// Sprite nesnesini dönen fonksiyon
 sf::Sprite mapManager::getSprite() {
     return _mapSprite;
 }
 
-// İmage nesnesini dönen fonksiyon
 sf::Image mapManager::getImage() {
     return _map;
 }
