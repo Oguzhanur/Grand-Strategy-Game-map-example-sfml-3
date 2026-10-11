@@ -31,7 +31,7 @@ private:
     sf::Sprite _mapSprite;
 
 public:
-    // Sadece fonksiyonların imzaları (prototipleri) kalıyor
+    // Sadece fonksiyon imzaları
     mapManager(std::string imagePath);
 
     std::unordered_map<int, State> CSVtoState(std::vector<dataType> data);
